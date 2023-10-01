@@ -31,18 +31,6 @@ async def get_users_date(days: str):
     users_date = users_date.strftime("%d.%m.%Y")
     return users_date
 
-async def get_exchange_usd(dct_curr: dict, date: str):
-    return {date: {dct_curr['currency']: {'sale': dct_curr['saleRate'], 'purchase': dct_curr['purchaseRate']}}}
-
-async def get_exchange_eur(dct_curr: dict, date: str):
-    return {date: {dct_curr['currency']: {'sale': dct_curr['saleRate'], 'purchase': dct_curr['purchaseRate']}}}
-
-async def get_exchange_gbp(dct_curr: dict, date: str):
-    return {date: {dct_curr['currency']: {'sale': dct_curr['saleRate'], 'purchase': dct_curr['purchaseRate']}}}
-
-async def get_exchange_pln(dct_curr: dict, date: str):
-    return {date: {dct_curr['currency']: {'sale': dct_curr['saleRate'], 'purchase': dct_curr['purchaseRate']}}}
-
 async def get_todays_date():
     await asyncio.sleep(0.1)
     todays_date = datetime.today().strftime("%d.%m.%Y")
@@ -95,25 +83,11 @@ async def get_exchange_eur_usd(user_input):
 
 PARSE_EXCHANGE = {1: get_exchange_eur_usd, 2: get_few_days_exchange, 3: get_one_currency_ex}
 
-def error_handler(func):
-
-    def wrapper():
-        try:
-            result = func()
-            return result
-        except KeyError:
-            return 'Too many parameters, expected 1 or 2 or 3.'
-        except ValueError:
-            return 'Please write a command in the format "py main.py (amount of days) (currency)"'
-    return wrapper
-
-@error_handler
 async def get_exchange():
     user_input = sys.argv
     len_input = len(user_input)
     result = await PARSE_EXCHANGE[len_input](user_input)
     return result
-
 
 if __name__ == "__main__":
     try:
@@ -124,6 +98,6 @@ if __name__ == "__main__":
         print(r)
         print(time() - start,'s')
     except KeyError:
-            print('Too many parameters, expected 1 or 2 or 3.')
+        print('Too many parameters, expected 1 or 2 or 3.')
     except ValueError:
         print('Please write a command in the format "py main.py (amount of days) (currency)"')

@@ -28,7 +28,7 @@ async def request(url):
         return None
 
 async def get_users_date(days: str):
-    # await asyncio.sleep(0.1)
+    await asyncio.sleep(0.1)
     date_today = datetime.today()
     if not 0 <= int(days) < 11:
         return 'Not more than 10 days and not less than 0'
@@ -54,8 +54,8 @@ async def get_few_days_exchange(command: list):
     return result
 
 async def get_todays_exchange(command):
-    todays_date = get_todays_date()
-    data = await request(f'https://api.privatbank.ua/p24api/exchange_rates?json&date={await todays_date}')
+    todays_date = await get_todays_date()
+    data = await request(f'https://api.privatbank.ua/p24api/exchange_rates?json&date={todays_date}')
     return data
 
 PARSE_EXCHANGE = {1: get_todays_exchange, 2: get_few_days_exchange}
@@ -102,6 +102,7 @@ class Server:
     async def distrubute(self, ws: WebSocketServerProtocol):
         async for message in ws:
             if message.lower().strip().startswith('exchange'):
+                await logging_exchange()
                 res = await get_exchange(message.strip().split())
                 await self.send_to_client(res, ws)
             else:

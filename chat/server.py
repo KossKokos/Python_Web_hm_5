@@ -66,7 +66,7 @@ async def logging_exchange():
         await afp.write(f"The command was called at - {datetime.now()}\n")
 
 async def get_exchange(user_input: list):
-    await logging_exchange()
+    # await logging_exchange()
     parse_input = len(user_input)
     result = await PARSE_EXCHANGE[parse_input](user_input)
     return str(result)
@@ -102,7 +102,7 @@ class Server:
     async def distrubute(self, ws: WebSocketServerProtocol):
         async for message in ws:
             if message.lower().strip().startswith('exchange'):
-                await logging_exchange()
+                # await logging_exchange()
                 res = await get_exchange(message.strip().split())
                 await self.send_to_client(res, ws)
             else:

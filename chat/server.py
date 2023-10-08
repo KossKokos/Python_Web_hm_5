@@ -102,9 +102,8 @@ class Server:
     async def distrubute(self, ws: WebSocketServerProtocol):
         async for message in ws:
             if message.lower().strip().startswith('exchange'):
-                # await logging_exchange()
                 res = await get_exchange(message.strip().split())
-                await self.send_to_client(res, ws)
+                await self.send_to_clients(res)
             else:
                 await self.send_to_clients(f"{ws.name}: {message}")
 
